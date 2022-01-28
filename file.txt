@@ -1,0 +1,4 @@
+(148, 'To redeem, visit https://tikebit.com/where-to-use', 'Tikebit™ can only be exchanged for Blockchain-based products. It is not a means of payment but a voucher. You have an online platform list that allows you to redeem your tikebit for different products based on Blockchain. We work daily to expand our platforms network. To redeem, visit https://tikebit.com/where-to-use'),
+(149, 'Visit https://cryptovoucher.io/redeem-now#/', 'Redeem your voucher to your preferred cryptocurrency. Easy, simple and secure. Visit https://cryptovoucher.io/redeem-now#/'),
+(150, 'Visit https://www.bitnovo.com/en/coupon-bitcoins-redeem', 'Redeem your coupon for cryptocurrencies. You can buy them at more than 40,000 points. Visit https://www.bitnovo.com/en/coupon-bitcoins-redeem'),
+(151, '', ''),
