@@ -1,15 +1,17 @@
 package com.tests.jsontosql;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.dhatim.fastexcel.reader.ReadableWorkbook;
+import org.dhatim.fastexcel.reader.Row;
+import org.dhatim.fastexcel.reader.Sheet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.stream.Stream;
 
 @SpringBootApplication
 public class JsonToSqlApplication {
@@ -17,22 +19,50 @@ public class JsonToSqlApplication {
     public static void main(String[] args) {
         SpringApplication.run(JsonToSqlApplication.class, args);
 
-        // CODE TO CONVERT REDEEM INSTRUCTIONS FROM JSON TO SQL QUERY
-        System.out.println("Hello world");
-        ObjectMapper mapper = new ObjectMapper();
-        TypeReference<List<RedeemInstruction>> typeReference = new TypeReference<>() {};
-        InputStream inputStream = TypeReference.class.getResourceAsStream("/redeemInstructions.json");
-        try{
-            List<RedeemInstruction> redeemInstructionList = mapper.readValue(inputStream, typeReference);
-            FileWriter fileWriter = new FileWriter("file.txt");
-            for (RedeemInstruction redeemInstruction : redeemInstructionList) {
-                fileWriter.write(String.format("(%d, '%s', '%s'),\n", redeemInstruction.getBrandId(), redeemInstruction.getConcise(), redeemInstruction.getVerbose()));
-            }
+        // CODE TO READ EXCEL FILE AND CONVERT TO JSON
+        System.out.println("Hello World!");
+        InputStream is = TypeReference.class.getResourceAsStream("/test.xlsx");
+        try {
+            assert is != null;
+            ReadableWorkbook workbook = new ReadableWorkbook(is);
+            Sheet sheet = workbook.getFirstSheet();
+            Stream<Row> rows = sheet.openStream();
+            FileWriter fileWriter = new FileWriter("redeemInstructions.json");
+            fileWriter.write("[\n");
+            rows.forEach(row -> {
+                BigDecimal column1 = row.getCellAsNumber(0).orElseThrow();
+                String column2 = row.getCellAsString(1).orElse("");
+                String column3 = row.getCellAsString(2).orElse("");
+                System.out.println(column1 + " " + column2 + " " + column3);
+                try {
+                    fileWriter.write(String.format("{\n\"brandId\": \"%d\",\n\"concise\": \"%s\",\n\"verbose\": \"%s\"\n},\n", column1.intValue(), column2, column3));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            fileWriter.write("]");
+            System.out.println("Done writing");
             fileWriter.close();
-            System.out.println(redeemInstructionList.size());
-        } catch (Exception e){
-            System.out.println("Error Happened biko \n" + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+//        // CODE TO CONVERT REDEEM INSTRUCTIONS FROM JSON TO SQL QUERY
+//        System.out.println("Hello world");
+//        ObjectMapper mapper = new ObjectMapper();
+//        TypeReference<List<RedeemInstruction>> typeReference = new TypeReference<>() {};
+//        InputStream inputStream = TypeReference.class.getResourceAsStream("/redeemInstructions.json");
+//        try{
+//            List<RedeemInstruction> redeemInstructionList = mapper.readValue(inputStream, typeReference);
+//            FileWriter fileWriter = new FileWriter("file.txt");
+//            for (RedeemInstruction redeemInstruction : redeemInstructionList) {
+//                fileWriter.write(String.format("(%d, '%s', '%s'),\n", redeemInstruction.getBrandId(), redeemInstruction.getConcise(), redeemInstruction.getVerbose()));
+//            }
+//            fileWriter.close();
+//            System.out.println(redeemInstructionList.size());
+//        } catch (Exception e){
+//            System.out.println("Error Happened biko \n" + e.getMessage());
+//        }
 
 
 //        // CODE TO CREATE A JSON FILE WITH EMPTY VALUES FOR REDEEM INSTRUCTIONS

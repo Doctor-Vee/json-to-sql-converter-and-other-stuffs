@@ -1,37 +1,17 @@
 [
 {
-"brandId": "141",
-"concise": "",
-"verbose": ""
+"brandId": "1",
+"concise": "Hello",
+"verbose": "Hello World"
 },
 {
-"brandId": "142",
+"brandId": "2",
 "concise": "",
-"verbose": ""
+"verbose": "Welcome to Lagos"
 },
 {
-"brandId": "143",
-"concise": "",
-"verbose": ""
-},
-{
-"brandId": "144",
-"concise": "",
-"verbose": ""
-},
-{
-"brandId": "145",
-"concise": "",
-"verbose": ""
-},
-{
-"brandId": "146",
-"concise": "",
-"verbose": ""
-},
-{
-"brandId": "147",
-"concise": "",
-"verbose": ""
+"brandId": "3",
+"concise": "Good Bye",
+"verbose": "Good bye to Nigeria"
 },
 ]
