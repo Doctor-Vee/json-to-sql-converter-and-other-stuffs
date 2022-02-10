@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 @SpringBootApplication
@@ -21,7 +22,7 @@ public class JsonToSqlApplication {
 
         // CODE TO READ EXCEL FILE AND CONVERT TO JSON
         System.out.println("Hello World!");
-        InputStream is = TypeReference.class.getResourceAsStream("/test.xlsx");
+        InputStream is = TypeReference.class.getResourceAsStream("/redeemInstructionsResearch.xlsx");
         try {
             assert is != null;
             ReadableWorkbook workbook = new ReadableWorkbook(is);
@@ -31,11 +32,12 @@ public class JsonToSqlApplication {
             fileWriter.write("[\n");
             rows.forEach(row -> {
                 BigDecimal column1 = row.getCellAsNumber(0).orElseThrow();
-                String column2 = row.getCellAsString(1).orElse("");
-                String column3 = row.getCellAsString(2).orElse("");
-                System.out.println(column1 + " " + column2 + " " + column3);
+                String column2 = row.getCellAsString(2).orElse("");
+                String column3 = row.getCellAsString(3).orElse("");
+                Integer brandId = column1.intValue();
+                String concise = column2.length() <=100 ? column2 : column3;
                 try {
-                    fileWriter.write(String.format("{\n\"brandId\": \"%d\",\n\"concise\": \"%s\",\n\"verbose\": \"%s\"\n},\n", column1.intValue(), column2, column3));
+                    fileWriter.write(String.format("{\n\"brandId\": \"%d\",\n\"concise\": \"%s\",\n\"verbose\": \"%s\"\n},\n", brandId, concise, column2));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
